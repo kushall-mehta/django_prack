@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 
@@ -21,15 +22,26 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%5i2s_gu3nfp@1z5-2a-e3$koj^y(y@^9#ootnhg0phr7a-qtz'
+SECRET_KEY = os.environ.get(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-%5i2s_gu3nfp@1z5-2a-e3$koj^y(y@^9#ootnhg0phr7a-qtz",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = [
-    ".vercel.app",
     "localhost",
-    "127.0.0.1",]
+    "127.0.0.1",
+    "testserver",
+    ".vercel.app",
+    *filter(None, os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")),
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.vercel.app",
+    *filter(None, os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")),
+]
 
 
 # Application definition
@@ -121,6 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
