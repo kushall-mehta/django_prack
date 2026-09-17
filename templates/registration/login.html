@@ -1,0 +1,37 @@
+{#check error #}
+{##}
+{#user is auth #}
+{#    login #}
+{##}
+{#    form#}
+
+{% if forms.errors %}
+    <p>Your Username or pass is wrong</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    	<p>you don't have permission to the page </p>
+    {% else %}
+         <p>Please login to see the page  </p>
+    {% endif %}
+
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    {{ form.username.label_tag }} {#done by dnago owen #}
+    {{ form.username }}
+
+    <br><br>
+    {{ form.password.label_tag }}
+    {{ form.password }}
+
+    <input type="submit" value="login">
+    <input type="hidden" name="next" value="{{ next }}">{# permission to see the next page #}
+</form>
+
+
+{#-- user logged in but no access#}
+{#-- user not logged in#}
+{#-- Form loging#}

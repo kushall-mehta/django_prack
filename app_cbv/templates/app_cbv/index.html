@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    
+    <h1>Number of books = {{ num_books }}</h1>
+    <h1>Number of instances = {{ num_instances }}</h1>
+    <h1>Number of instances_available = {{ num_instances_available }}</h1>
+    {% if user.is_authenticated %}
+        <p>You are logged in.</p>
+        <p>Your user ID is: {{ user.id }}</p>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Log out</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Log in</a>
+    {% endif %}
+
+
+</body>
+</html>
